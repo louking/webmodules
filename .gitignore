@@ -141,6 +141,9 @@ js/
 # node.js
 node_modules/
 
+# docker secret
+db/password.txt
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
