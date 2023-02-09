@@ -26,7 +26,7 @@ jobs:
         name: Build and push
         uses: isbang/compose-action@v1.4.1
         with:
-          # context: .
-          # file: ./Dockerfile
+          context: .
+          file: ./docker-compose.yaml
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules:latest
