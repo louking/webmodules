@@ -8,4 +8,4 @@ The `docker-skel` version contains skeleton which is suitable to start developin
 
 build: `docker compose build`
 
-run for development: `docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d`
+run for development: `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d`
