@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    volumes:
+      - ./app/src:/app
+    environment:
+      - FLASK_DEBUG=True

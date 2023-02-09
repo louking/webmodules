@@ -19,11 +19,11 @@ services:
     # restart: always
     secrets:
       - db-password
-    # volumes:
-    #   - ./src:/app
     networks:
       - backend-network
       - frontend-network
+    ports:
+      - 5678:5678
 
   web:
     build: web

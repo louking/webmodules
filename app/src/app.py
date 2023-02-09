@@ -1,5 +1,9 @@
 import mysql.connector
 from flask import Flask, jsonify
+from ptvsd import enable_attach
+
+# enable python visual studio debugger
+enable_attach(address=('0.0.0.0', 5678))
 
 app = Flask(__name__)
 conn = None
@@ -50,4 +54,4 @@ def listBlog():
     return jsonify({"response": result})
 
 if __name__ == "__main__":
-    app.run(host ='0.0.0.0', debug=True, port=5000)
+    app.run(host ='0.0.0.0', port=5000)
