@@ -1,0 +1,7 @@
+version: '3.8'
+
+secrets:
+  db-password:
+    file: /home/appuser/.docker/webmodules-db-password.txt
+  user-password:
+    file: /home/appuser/.docker/webmodules-user-password.txt

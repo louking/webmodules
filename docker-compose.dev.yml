@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   app:
+    ports:
+      - 5678:5678
     volumes:
       - ./app/src:/app
     environment:

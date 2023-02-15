@@ -1,33 +1,38 @@
 version: "3.8"
+
 services:
   db:
-    image: mysql:8.0.19
-    command: '--default-authentication-plugin=mysql_native_password'
-    restart: always
+    # https://github.com/docker-library/mysql/issues/275#issuecomment-636831964
+    image: mysql:8.0.32 # 32 gives access denied on centos7 server for both root and user
+    # command: '--default-authentication-plugin=mysql_native_password'
+    command: '--default-authentication-plugin=mysql_native_password --log_error_verbosity=3' # mysql
+    # restart: always
     secrets:
       - db-password
+      - user-password
     volumes:
       - db-data:/var/lib/mysql
     networks:
       - backend-network
     environment:
-      - MYSQL_DATABASE=example
+      - MYSQL_DATABASE=webmodules
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD_FILE=/run/secrets/user-password
 
   app:
     build: app
-    # restart: always
+    restart: always
     secrets:
       - db-password
+      - user-password
     networks:
       - backend-network
       - frontend-network
-    ports:
-      - 5678:5678
 
   web:
     build: web
-    # restart: always
+    restart: always
     ports:
       - 8000:80
     networks:
@@ -39,6 +44,8 @@ volumes:
 secrets:
   db-password:
     file: db/password.txt
+  user-password:
+    file: db/userpassword.txt
 
 networks:
   backend-network:

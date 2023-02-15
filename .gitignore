@@ -142,7 +142,7 @@ js/
 node_modules/
 
 # docker secret
-db/password.txt
+db/*password.txt
 
 ### VisualStudioCode ###
 .vscode/*

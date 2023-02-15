@@ -32,7 +32,8 @@
                     "localRoot": "${workspaceFolder}/app/src",
                     "remoteRoot": "/app"
                 }
-            ]
+            ],
+            "justMyCode": false
         },
         {
             "name": "Docker: Python - Flask",
