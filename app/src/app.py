@@ -45,8 +45,7 @@ def hello_world():
 def listBlog():
     global conn
     if not conn:
-        conn = DBManager(host='db', database='webmodules', user='root', password_file='/run/secrets/db-password',
-                         )
+        conn = DBManager(host='db', database='webmodules', user='user', password_file='/run/secrets/user-password')
         conn.populate_db()
         
     rec = conn.query_titles()
