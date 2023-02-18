@@ -11,14 +11,15 @@ conn = None
 # adapted from https://github.com/aiordache/demos/blob/c7aa37cc3e2f8800296f668138b4cf208b27380a/dockercon2020-demo/app/src/server.py
 # similar to https://github.com/docker/awesome-compose/blob/e6b1d2755f2f72a363fc346e52dce10cace846c8/nginx-flask-mysql/backend/hello.py
 class DBManager:
-    def __init__(self, database='example', host="db", user="root", password_file=None):
+    def __init__(self, database='example', host="db", user="root", password_file=None, **kwargs):
         pf = open(password_file, 'r')
         self.connection = mysql.connector.connect(
             user=user, 
-            password=pf.read(),
+            password=pf.read().strip(),
             host=host,  # name of the mysql service as set in the docker compose file
             database=database,
-            auth_plugin='mysql_native_password'
+            auth_plugin='mysql_native_password',
+            **kwargs
         )
         pf.close()
         self.cursor = self.connection.cursor()
@@ -44,7 +45,8 @@ def hello_world():
 def listBlog():
     global conn
     if not conn:
-        conn = DBManager(host='db', database='webmodules', user='root', password_file='/run/secrets/db-password')
+        conn = DBManager(host='db', database='webmodules', user='root', password_file='/run/secrets/db-password',
+                         )
         conn.populate_db()
         
     rec = conn.query_titles()
