@@ -23,6 +23,8 @@ services:
   app:
     build: app
     restart: always
+    depends_on:
+      - db
     secrets:
       - db-password
       - user-password
@@ -37,6 +39,21 @@ services:
       - 8000:80
     networks:
       - frontend-network
+    # uncomment to debug
+    # command: [nginx-debug, '-g', 'daemon off;']
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-fpm
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - backend-network
+      - frontend-network
+    environment:
+      - PMA_ABSOLUTE_URI=http://phpmyadmin/phpmyadmin
+    #   - PMA_ARBITRARY=1
+    #   - PMA_HOST=db
 
 volumes:
   db-data:
