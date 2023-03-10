@@ -1,5 +1,13 @@
 version: '3.8'
 
+services:
+  web:
+    ports:
+      - 8000:443
+    volumes:
+      - /etc/letsencrypt/live:/etc/nginx/ssl/live
+      - ./nginx.conf.prod:/etc/nginx/conf.d/server.conf:ro
+
 secrets:
   db-password:
     file: /home/appuser/.docker/webmodules-db-password.txt
