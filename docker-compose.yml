@@ -35,8 +35,6 @@ services:
   web:
     build: web
     restart: always
-    ports:
-      - 8000:80
     networks:
       - frontend-network
     # uncomment to debug
