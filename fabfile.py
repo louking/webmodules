@@ -30,7 +30,7 @@ from invoke import Exit
 APP_NAME = 'webmodules'
 
 @task
-def deploy(c, branchname='master'):
+def deploy(c, branchname='main'):
     print(f'c.user={c.user} c.host={c.host} branchname={branchname}')
 
     venv_dir = f'/var/www/{c.host}/.venv'
@@ -43,9 +43,9 @@ def deploy(c, branchname='master'):
 
     c.run(f'cd {project_dir} && git checkout {branchname}')
     
-    versions_dir = f'{project_dir}/migrations/versions'
-    if not c.run(f'test -d {versions_dir}', warn=True):
-        c.run(f'mkdir {versions_dir}')
+    # versions_dir = f'{project_dir}/migrations/versions'
+    # if not c.run(f'test -d {versions_dir}', warn=True):
+    #     c.run(f'mkdir {versions_dir}')
 
     # this needs to be run in container, after container is started
     # c.run(f'cd {project_dir} && source {venv_dir}/bin/activate && flask db upgrade')
