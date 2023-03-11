@@ -35,6 +35,8 @@ services:
   web:
     build: web
     restart: always
+    depends_on:
+      - app
     networks:
       - frontend-network
     # uncomment to debug
