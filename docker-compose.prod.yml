@@ -5,7 +5,7 @@ services:
     ports:
       - 8000:443
     volumes:
-      - /etc/letsencrypt:/etc/nginx/ssl:ro
+      # - /etc/letsencrypt:/etc/nginx/ssl:ro
       - ./web/nginx.conf.prod:/etc/nginx/conf.d/server.conf:ro
 
 secrets:
