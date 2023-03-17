@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     ports:
-      - 8000:443
+      - 8000:80
     volumes:
       # - /etc/letsencrypt:/etc/nginx/ssl:ro
       - ./web/nginx.conf.prod:/etc/nginx/conf.d/server.conf:ro

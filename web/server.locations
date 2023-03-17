@@ -21,4 +21,13 @@
             rewrite ^/phpmyadmin(/.*)$ $1 break; # https://stackoverflow.com/a/47447211/799921
             fastcgi_pass phpmyadmin:9000;
             include fastcgi.conf;
+
+            # replace these with forwarded versions
+            fastcgi_param   REMOTE_ADDR             $http_x_forwarded_for;
+            fastcgi_param   REMOTE_PORT             $http_x_forwarded_port;
+            fastcgi_param   SERVER_ADDR             $http_x_forwarded_for;
+            fastcgi_param   SERVER_PORT             $http_x_forwarded_port;
+            fastcgi_param   HTTP_HOST               $http_x_forwarded_host;
+
+            fastcgi_param   HTTPS                   $http_x_forwarded_scheme;
         }
