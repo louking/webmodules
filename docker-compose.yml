@@ -39,6 +39,8 @@ services:
       - app
     networks:
       - frontend-network
+    ports:
+      - 8000:80
     # uncomment to debug
     # command: [nginx-debug, '-g', 'daemon off;']
 

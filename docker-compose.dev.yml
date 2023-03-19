@@ -8,9 +8,3 @@ services:
       - ./app/src:/app
     environment:
       - FLASK_DEBUG=True
-  
-  web:
-    volumes:
-      - ./web/nginx.conf.dev:/etc/nginx/conf.d/server.conf:ro
-    ports:
-      - 8000:80
