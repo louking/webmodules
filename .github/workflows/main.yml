@@ -35,7 +35,7 @@ jobs:
         with:
           context: ./app
           build-args: |
-            PYTHON_VER=${PYTHON_VER}
+            PYTHON_VER=$PYTHON_VER
           file: ./app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-app:latest
@@ -45,8 +45,8 @@ jobs:
         with:
           context: ./web
           build-args: |
-            NGINX_VER=${NGINX_VER}
-            PHPMYADMIN_VER=${PHPMYADMIN_VER}
+            NGINX_VER=$NGINX_VER
+            PHPMYADMIN_VER=$PHPMYADMIN_VER
           file: ./web/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-web:latest
