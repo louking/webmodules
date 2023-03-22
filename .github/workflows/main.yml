@@ -32,6 +32,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./app
+          build-args: |
+            PYTHON_VER=${PYTHON_VER}
           file: ./app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-app:latest
@@ -40,6 +42,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./web
+          build-args: |
+            NGINX_VER=${NGINX_VER}
+            PHPMYADMIN_VER=${PHPMYADMIN_VER}
           file: ./web/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-web:latest
