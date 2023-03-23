@@ -9,6 +9,8 @@ jobs:
   build:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    environment: build
+
     steps:
       -
         name: Checkout
