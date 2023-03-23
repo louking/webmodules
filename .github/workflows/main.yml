@@ -9,6 +9,8 @@ jobs:
   build:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    
+    # https://docs.github.com/en/actions/using-jobs/using-environments-for-jobs
     environment: build
 
     steps:
