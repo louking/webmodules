@@ -1,5 +1,19 @@
 version: '3.8'
 
+services:
+  app:
+    logging:
+      driver: journald
+  web:
+    logging:
+      driver: journald
+  phpmyadmin:
+    logging:
+      driver: journald
+  db:
+    logging:
+      driver: journald
+
 secrets:
   db-password:
     file: /home/appuser/.docker/webmodules-db-password.txt
