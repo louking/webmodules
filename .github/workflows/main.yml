@@ -9,6 +9,10 @@ jobs:
   build:
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    
+    # https://docs.github.com/en/actions/using-jobs/using-environments-for-jobs
+    environment: build
+
     steps:
       -
         name: Checkout
@@ -27,14 +31,19 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./app
+          build-args: |
+            PYTHON_VER=${{vars.PYTHON_VER}}
           file: ./app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-app:latest
       -
         name: Build and push web
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./web
+          build-args: |
+            NGINX_VER=${{vars.NGINX_VER}}
+            PHPMYADMIN_VER=${{vars.PHPMYADMIN_VER}}
           file: ./web/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/webmodules-web:latest
