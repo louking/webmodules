@@ -1,7 +1,7 @@
 ARG PYTHON_VER
 
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:${PYTHON_VER}-slim
+FROM python:${PYTHON_VER}-alpine
 
 EXPOSE 5000
 
@@ -16,7 +16,17 @@ WORKDIR /app
 
 # Install pip requirements
 COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+
+# needed for mysqlclient package to compile
+# adapted from https://github.com/gliderlabs/docker-alpine/issues/181#issuecomment-444857401
+#   and https://github.com/gliderlabs/docker-alpine/issues/181#issuecomment-348608168
+RUN apk add --no-cache mariadb-connector-c-dev \
+    && apk add --no-cache --virtual .build-deps \
+        build-base \
+        mariadb-dev \
+    && pip install -qq -r requirements.txt \
+    && rm -rf .cache/pip \
+    && apk del .build-deps
 
 # copy the content of the local src directory to the working directory
 # this isn't needed when developing as there's a bind under volumes: in the docker-compose.dev.yml file

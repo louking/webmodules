@@ -1,12 +1,29 @@
-import mysql.connector
-from flask import Flask, jsonify
-from ptvsd import enable_attach
+# standard
+import os.path
 
-# enable python visual studio debugger
-enable_attach(address=('0.0.0.0', 5678))
+# pypi
+from flask import jsonify
+from flask_migrate import Migrate
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-app = Flask(__name__)
-conn = None
+# homegrown
+from init import create_app, appname
+from settings import Production
+from model import db
+
+abspath = os.path.abspath('/config')
+configpath = os.path.join(abspath, f'{appname}.cfg')
+configfiles = [configpath]
+# userconfigpath = os.path.join(abspath, 'users.cfg')
+# # userconfigpath first so configpath can override
+# configfiles.insert(0, userconfigpath)
+
+# init_for_operation=False because when we create app this would use database and cause
+# sqlalchemy.exc.OperationalError if one of the updating tables needs migration
+app = create_app(Production(configfiles), configfiles, init_for_operation=False)
+
+# set up flask command processing
+migrate = Migrate(app, db, compare_type=True)
 
 # adapted from https://github.com/aiordache/demos/blob/c7aa37cc3e2f8800296f668138b4cf208b27380a/dockercon2020-demo/app/src/server.py
 # similar to https://github.com/docker/awesome-compose/blob/e6b1d2755f2f72a363fc346e52dce10cace846c8/nginx-flask-mysql/backend/hello.py
