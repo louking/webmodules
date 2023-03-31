@@ -59,7 +59,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     #     app.config[configkey] = app.config[configkey].format(productname=app.config['THISAPP_PRODUCTNAME_TEXT'])
 
     # initialize database
-    from model import db
+    from .model import db
     db.init_app(app)
 
     # # initialize uploads

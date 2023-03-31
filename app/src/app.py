@@ -7,9 +7,9 @@ from flask_migrate import Migrate
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 # homegrown
-from init import create_app, appname
-from settings import Production
-from model import db
+from webmodules import create_app, appname
+from webmodules.settings import Production
+from webmodules.model import db
 
 abspath = os.path.abspath('/config')
 configpath = os.path.join(abspath, f'{appname}.cfg')
