@@ -17,6 +17,7 @@ services:
       - frontend-network
     volumes:
       - ./app/src:/app
+      - ./config:/config:ro
     tty: true # https://stackoverflow.com/a/55953120/799921
     
   app:
