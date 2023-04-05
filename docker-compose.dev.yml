@@ -1,9 +1,25 @@
 version: '3.8'
 
 services:
+  shell:
+    build: 
+      context: app
+      args:
+        - PYTHON_VER=${PYTHON_VER}
+    restart: always
+    depends_on:
+      - db
+    secrets:
+      - db-password
+      - user-password
+    networks:
+      - backend-network
+      - frontend-network
+    volumes:
+      - ./app/src:/app
+    tty: true # https://stackoverflow.com/a/55953120/799921
+    
   app:
-    ports:
-      - 5678:5678
     volumes:
       - ./app/src:/app
     environment:
