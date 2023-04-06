@@ -67,9 +67,8 @@ class RealDb(Config):
         password = config['dbpassword']
         dbserver = config['dbserver']
         dbname = config['dbname']
-        # app.logger.debug('using mysql://{uname}:*******@{server}/{dbname}'.format(uname=dbuser,server=dbserver,dbname=dbname))
-        db_uri = 'mysql://{uname}:{pw}@{server}/{dbname}'.format(uname=dbuser, pw=password, server=dbserver,
-                                                                 dbname=dbname)
+        # app.logger.debug(f'mysql://{dbuser}:*******@{dbserver}/{dbname}')
+        db_uri = f'mysql://{dbuser}:{password}@{dbserver}/{dbname}'
         self.SQLALCHEMY_DATABASE_URI = db_uri
         # # uncomment when user database is available
         # # https://flask-sqlalchemy.palletsprojects.com/en/2.x/binds/

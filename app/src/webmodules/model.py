@@ -9,11 +9,13 @@ from collections import OrderedDict
 
 # pypi
 from flask import g
+from flask_sqlalchemy import SQLAlchemy
 
 # home grown
 # need to use a single SQLAlchemy() instance, so pull from loutilities.user.model
-from loutilities.user.model import db, LocalUserMixin, ManageLocalTables, EMAIL_LEN
-from loutilities.user.tablefiles import FilesMixin
+# from loutilities.user.model import db, LocalUserMixin, ManageLocalTables, EMAIL_LEN
+# from loutilities.user.tablefiles import FilesMixin
+db = SQLAlchemy()
 
 # set up database - SQLAlchemy() must be done after app.config SQLALCHEMY_* assignments
 Table = db.Table

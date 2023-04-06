@@ -6,4 +6,4 @@ services:
       - 5678:5678
     environment:
       - FLASK_DEBUG=True
-    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 app.py runserver 0.0.0.0:5000 --nothreading --noreload"]
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 app.py --nothreading --noreload"]

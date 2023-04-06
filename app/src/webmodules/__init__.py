@@ -142,8 +142,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     # from .views import userrole as userroleviews
     # from loutilities.user.views import bp as userrole
     # app.register_blueprint(userrole)
-    # from .views.frontend import bp as frontend
-    # app.register_blueprint(frontend)
+    from .views.public import bp as public
+    app.register_blueprint(public)
     # from .views.admin import bp as admin
     # app.register_blueprint(admin)
 
@@ -164,6 +164,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         # see https://github.com/pallets/flask-sqlalchemy/blob/706982bb8a096220d29e5cef156950237753d89f/flask_sqlalchemy/__init__.py#L990
         db.session = scoped_session(sessionmaker(autocommit=False,
                                                  autoflush=False,
+                                                 bind=db.get_engine(),
                                                  # uncomment when using user database
                                                  #  binds=db.get_binds(app)
                                                  ))
