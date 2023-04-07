@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# NOTE: file end of line characters must be LF, not CRLF (see https://stackoverflow.com/a/58220487/799921)
+
 # initial volume create may cause flask db upgrade to fail
 while ! flask db upgrade
 do
