@@ -30,10 +30,9 @@ from invoke import Exit
 APP_NAME = 'webmodules'
 
 @task
-def deploy(c, branchname='main'):
+def deploy(c, branchname='main', qualifier='prod'):
     print(f'c.user={c.user} c.host={c.host} branchname={branchname}')
 
-    venv_dir = f'/var/www/{c.host}/.venv'
     project_dir = f'/var/www/{c.host}/{APP_NAME}/{APP_NAME}'
 
     c.run(f'cd {project_dir} && git pull')
@@ -43,9 +42,6 @@ def deploy(c, branchname='main'):
 
     c.run(f'cd {project_dir} && git checkout {branchname}')
     
-    # versions_dir = f'{project_dir}/migrations/versions'
-    # if not c.run(f'test -d {versions_dir}', warn=True):
-    #     c.run(f'mkdir {versions_dir}')
-
-    # this needs to be run in container, after container is started
-    # c.run(f'cd {project_dir} && source {venv_dir}/bin/activate && flask db upgrade')
+    # stop and build/start docker services
+    c.run(f'cd {project_dir} && docker compose down')
+    c.run(f'cd {project_dir} && docker compose -f docker-compose.yml -f docker-compose.{qualifier}.yml up --build -d')
