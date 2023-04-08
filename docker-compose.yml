@@ -1,5 +1,7 @@
 version: "3.8"
 
+# see .env for image version env variables
+# see repo/settings/environments for image version env variables for github actions
 services:
   db:
     # https://github.com/docker-library/mysql/issues/275#issuecomment-636831964
@@ -64,6 +66,22 @@ services:
       - frontend-network
     environment:
       - PMA_ABSOLUTE_URI=http://phpmyadmin/phpmyadmin
+
+  crond:
+    build:
+      context: crond
+      args:
+        - ALPINE_VER=${ALPINE_VER}
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - backend-network
+    secrets:
+      - db-password
+    # start crond with log level 8 in foreground, output to stderr
+    command: ["crond", "-f", "-d", "8"]
+    # command: ["crond", "-f", "-d", "8", "-l", "2", "-L", "/dev/stdout"]
 
 volumes:
   db-data:
