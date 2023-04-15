@@ -1,6 +1,9 @@
-MAILTO=webmaster@steeplechasers.org
+MAILTO=lking@pobox.com
 
 # backup webmodules db (fwiw, see https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Portable-Shell.html#Portable-Shell)
 40 01 * * * mysqldump -h db -u root -p"$(cat /run/secrets/db-password)" webmodules | gzip > /backup/webmodules-$(date +%Y-%m-%d).sql.gz
+
+# # test mail
+# * * * * * echo "test mail"
 
 # remember to end this file with an empty new line

@@ -79,8 +79,11 @@ services:
       - backend-network
     secrets:
       - db-password
+    volumes:
+      - ./config/msmtprc:/etc/msmtprc:ro
     # start crond with log level 8 in foreground, output to stderr
     command: ["crond", "-f", "-d", "8"]
+    # use this to debug
     # command: ["crond", "-f", "-d", "8", "-l", "2", "-L", "/dev/stdout"]
 
 volumes:
