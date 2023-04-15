@@ -81,6 +81,8 @@ services:
       - db-password
     volumes:
       - ./config/msmtprc:/etc/msmtprc:ro
+    environment:
+      - TZ=America/New_York
     # start crond with log level 8 in foreground, output to stderr
     command: ["crond", "-f", "-d", "8"]
     # use this to debug
