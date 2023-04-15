@@ -8,7 +8,7 @@ import os.path
 
 # pypi
 from flask import Flask, send_from_directory, g, session, request, url_for, render_template, current_app
-# from flask_mail import Mail
+from flask_mail import Mail
 from jinja2 import ChoiceLoader, PackageLoader
 from flask_security import SQLAlchemyUserDatastore, current_user
 from werkzeug.local import LocalProxy
@@ -112,8 +112,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     # asset_env.init_app(app)
     # asset_env.register(asset_bundles)
 
-    # # Set up Flask-Mail [configuration in <application>.cfg] and security mailer
-    # mail = Mail(app)
+    # Set up Flask-Mail [configuration in <application>.cfg] and security mailer
+    mail = Mail(app)
 
     # def security_send_mail(subject, recipient, template, **context):
     #     # this may be called from view which doesn't reference interest

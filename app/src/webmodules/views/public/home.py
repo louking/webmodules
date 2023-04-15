@@ -6,6 +6,7 @@ home - public views
 # pypi
 from flask import render_template, jsonify
 from flask.views import MethodView
+from loutilities.flask_helpers.mailer import sendmail
 
 # homegrown
 from . import bp
@@ -25,3 +26,13 @@ def listBlog():
     result = [e.title for e in entries]
 
     return jsonify({"response": result})
+
+@bp.route('/testmail')
+def testMail():
+    html = '<p>this is a test of your emergency mailing system</p>'
+    sendmail(
+        subject='test mail from app',
+        fromaddr='lou@loutilities.us', 
+        toaddr='lou.king@steeplechasers.org',
+        html=html)
+    return jsonify({"response": 'done!'})
