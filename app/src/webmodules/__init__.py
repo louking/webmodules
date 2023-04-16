@@ -155,9 +155,9 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         # # import navigation after views created
         # from . import nav
 
-        # # turn on logging
-        # from .applogging import setlogging
-        # setlogging()
+        # turn on logging
+        from .applogging import setlogging
+        setlogging()
         
         # set up scoped session
         from sqlalchemy.orm import scoped_session, sessionmaker
@@ -197,21 +197,21 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     #                                                          key=lambda a: a['description'].lower())
     #         session.pop('user_email', None)
 
-    # # ----------------------------------------------------------------------
-    # @app.after_request
-    # def after_request(response):
-    #     # # check if there are any changes needed to LocalUser table
-    #     # userupdated = User.query.order_by(desc('updated_at')).first().updated_at
-    #     # localuserupdated = LocalUser.query.order_by(desc('updated_at')).first().updated_at
-    #     # interestupdated = Interest.query.order_by(desc('updated_at')).first().updated_at
-    #     # localinterestupdated = LocalInterest.query.order_by(desc('updated_at')).first().updated_at
-    #     # if userupdated > localuserupdated or interestupdated > localinterestupdated:
-    #     #     update_local_tables()
+    # ----------------------------------------------------------------------
+    @app.after_request
+    def after_request(response):
+        # # check if there are any changes needed to LocalUser table
+        # userupdated = User.query.order_by(desc('updated_at')).first().updated_at
+        # localuserupdated = LocalUser.query.order_by(desc('updated_at')).first().updated_at
+        # interestupdated = Interest.query.order_by(desc('updated_at')).first().updated_at
+        # localinterestupdated = LocalInterest.query.order_by(desc('updated_at')).first().updated_at
+        # if userupdated > localuserupdated or interestupdated > localinterestupdated:
+        #     update_local_tables()
 
-    #     if not app.config['DEBUG']:
-    #         app.logger.info(
-    #             '{}: {} {} {}'.format(request.remote_addr, request.method, request.url, response.status_code))
-    #     return response
+        if not app.config['DEBUG']:
+            app.logger.info(
+                '{}: {} {} {}'.format(request.remote_addr, request.method, request.url, response.status_code))
+        return response
 
     # app back to caller
     return app
