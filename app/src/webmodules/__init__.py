@@ -209,8 +209,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         #     update_local_tables()
 
         if not app.config['DEBUG']:
-            app.logger.info(
-                '{}: {} {} {}'.format(request.remote_addr, request.method, request.url, response.status_code))
+            app.logger.info(f'{request.remote_addr}: {request.method} {request.url} {response.status_code}')
+        
         return response
 
     # app back to caller

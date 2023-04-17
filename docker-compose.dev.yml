@@ -23,8 +23,6 @@ services:
   app:
     volumes:
       - ./app/src:/app
-    environment:
-      - FLASK_DEBUG=True
 
   crond:
     volumes:

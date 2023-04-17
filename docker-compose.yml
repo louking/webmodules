@@ -38,6 +38,8 @@ services:
       - frontend-network
     volumes:
       - ./config:/config:ro
+    environment:
+      - FLASK_DEBUG=True
     command: ["./dbupgrade_and_run.sh", "gunicorn", "--reload", "--bind", "0.0.0.0:5000", "app:app"]
 
   web:
