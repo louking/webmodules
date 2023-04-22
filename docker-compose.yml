@@ -11,16 +11,21 @@ services:
     restart: always
     secrets:
       - db-password
-      - user-password
+      - users-password
+      - webmodules-password
     volumes:
       - db-data:/var/lib/mysql
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - backend-network
     environment:
-      - MYSQL_DATABASE=webmodules
+      - MYSQL_DATABASE=users
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
       - MYSQL_USER=user
-      - MYSQL_PASSWORD_FILE=/run/secrets/user-password
+      - MYSQL_PASSWORD_FILE=/run/secrets/users-password
+      - WEBMODULES_DATABASE=webmodules
+      - WEBMODULES_USER=webmodules
+      - WEBMODULES_PASSWORD_FILE=/run/secrets/webmodules-password
 
   app:
     build: 
@@ -32,7 +37,7 @@ services:
       - db
     secrets:
       - db-password
-      - user-password
+      - users-password
     networks:
       - backend-network
       - frontend-network
@@ -96,8 +101,10 @@ volumes:
 secrets:
   db-password:
     file: db/password.txt
-  user-password:
-    file: db/userpassword.txt
+  users-password:
+    file: db/users-password.txt
+  webmodules-password:
+    file: db/webmodules-password.txt
 
 networks:
   backend-network:

@@ -23,5 +23,5 @@ services:
 secrets:
   db-password:
     file: /home/appuser/.docker/webmodules-db-password.txt
-  user-password:
-    file: /home/appuser/.docker/webmodules-user-password.txt
+  users-password:
+    file: /home/appuser/.docker/webmodules-users-password.txt

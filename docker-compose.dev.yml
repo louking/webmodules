@@ -11,7 +11,7 @@ services:
       - db
     secrets:
       - db-password
-      - user-password
+      - users-password
     networks:
       - backend-network
       - frontend-network
