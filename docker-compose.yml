@@ -100,11 +100,11 @@ volumes:
 
 secrets:
   db-password:
-    file: db/password.txt
+    file: config/db/root-password.txt
   users-password:
-    file: db/users-password.txt
+    file: config/db/users-password.txt
   webmodules-password:
-    file: db/webmodules-password.txt
+    file: config/db/webmodules-password.txt
 
 networks:
   backend-network:

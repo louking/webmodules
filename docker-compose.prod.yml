@@ -19,9 +19,3 @@ services:
       driver: journald
     volumes:
       - /mnt/backup/db_backup:/backup
-
-secrets:
-  db-password:
-    file: /home/appuser/.docker/webmodules-db-password.txt
-  users-password:
-    file: /home/appuser/.docker/webmodules-users-password.txt
