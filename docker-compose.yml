@@ -12,10 +12,8 @@ services:
     secrets:
       - db-password
       - users-password
-      - webmodules-password
     volumes:
       - db-data:/var/lib/mysql
-      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - backend-network
     environment:
@@ -23,9 +21,6 @@ services:
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
       - MYSQL_USER=user
       - MYSQL_PASSWORD_FILE=/run/secrets/users-password
-      - WEBMODULES_DATABASE=webmodules
-      - WEBMODULES_USER=webmodules
-      - WEBMODULES_PASSWORD_FILE=/run/secrets/webmodules-password
 
   app:
     build: 
@@ -38,6 +33,7 @@ services:
     secrets:
       - db-password
       - users-password
+      - webmodules-password
     networks:
       - backend-network
       - frontend-network
@@ -45,6 +41,9 @@ services:
       - ./config:/config:ro
     environment:
       - FLASK_DEBUG=True
+      - APP_DATABASE=webmodules
+      - APP_USER=webmodules
+      - APP_PASSWORD_FILE=/run/secrets/webmodules-password
     command: ["./dbupgrade_and_run.sh", "gunicorn", "--reload", "--bind", "0.0.0.0:5000", "app:app"]
 
   web:

@@ -28,6 +28,12 @@ RUN apk add --no-cache mariadb-connector-c-dev \
     && rm -rf .cache/pip \
     && apk del .build-deps
 
+# we'll be doing mysql, mysqldump commands
+RUN apk add --no-cache mysql-client
+
+# we're going to want to use bash
+RUN apk add bash
+
 # copy the content of the local src directory to the working directory
 # this isn't needed when developing as there's a bind under volumes: in the docker-compose.dev.yml file
 COPY src .
