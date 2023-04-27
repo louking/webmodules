@@ -20,9 +20,9 @@ from webmodules.model import db
 abspath = os.path.abspath('/config')
 configpath = os.path.join(abspath, f'{appname}.cfg')
 configfiles = [configpath]
-# userconfigpath = os.path.join(abspath, 'users.cfg')
-# # userconfigpath first so configpath can override
-# configfiles.insert(0, userconfigpath)
+userconfigpath = os.path.join(abspath, 'users.cfg')
+# userconfigpath first so configpath can override
+configfiles.insert(0, userconfigpath)
 
 # init_for_operation=False because when we create app this would use database and cause
 # sqlalchemy.exc.OperationalError if one of the updating tables needs migration

@@ -19,7 +19,7 @@ from werkzeug.local import LocalProxy
 # from .views.admin.uploads import init_uploads
 from loutilities.configparser import getitems
 # from loutilities.user import UserSecurity
-# from loutilities.user.model import Interest, Application, User, Role
+from loutilities.user.model import Interest, Application, User, Role
 # from loutilities.flask_helpers.mailer import sendmail
 
 appname = 'webmodules'
@@ -51,12 +51,12 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     # define product name (don't import nav until after app.jinja_env.globals['_productname'] set)
     app.jinja_env.globals['_productname'] = app.config['THISAPP_PRODUCTNAME']
     app.jinja_env.globals['_productname_text'] = app.config['THISAPP_PRODUCTNAME_TEXT']
-    # # uncomment when flask security added (users.cfg)
-    # for configkey in ['SECURITY_EMAIL_SUBJECT_PASSWORD_RESET',
-    #                   'SECURITY_EMAIL_SUBJECT_PASSWORD_CHANGE_NOTICE',
-    #                   'SECURITY_EMAIL_SUBJECT_PASSWORD_NOTICE',
-    #                   ]:
-    #     app.config[configkey] = app.config[configkey].format(productname=app.config['THISAPP_PRODUCTNAME_TEXT'])
+    # uncomment when flask security added (users.cfg)
+    for configkey in ['SECURITY_EMAIL_SUBJECT_PASSWORD_RESET',
+                      'SECURITY_EMAIL_SUBJECT_PASSWORD_CHANGE_NOTICE',
+                      'SECURITY_EMAIL_SUBJECT_PASSWORD_NOTICE',
+                      ]:
+        app.config[configkey] = app.config[configkey].format(productname=app.config['THISAPP_PRODUCTNAME_TEXT'])
 
     # initialize database
     from .model import db
@@ -162,12 +162,17 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         # set up scoped session
         from sqlalchemy.orm import scoped_session, sessionmaker
         # see https://github.com/pallets/flask-sqlalchemy/blob/706982bb8a096220d29e5cef156950237753d89f/flask_sqlalchemy/__init__.py#L990
-        db.session = scoped_session(sessionmaker(autocommit=False,
-                                                 autoflush=False,
-                                                 bind=db.get_engine(),
-                                                 # uncomment when using user database
-                                                 #  binds=db.get_binds(app)
-                                                 ))
+        # use binds if userdb is defined
+        if 'userdbname' in app.config:
+            db.session = scoped_session(sessionmaker(autocommit=False,
+                                                    autoflush=False,
+                                                    binds=db.get_binds(app)
+                                                    ))
+        else:
+            db.session = scoped_session(sessionmaker(autocommit=False,
+                                                    autoflush=False,
+                                                    bind=db.get_engine(),
+                                                    ))
         db.query = db.session.query_property()
 
         # # handle favicon request for old browsers

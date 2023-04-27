@@ -9,13 +9,11 @@ from collections import OrderedDict
 
 # pypi
 from flask import g
-from flask_sqlalchemy import SQLAlchemy
 
 # home grown
 # need to use a single SQLAlchemy() instance, so pull from loutilities.user.model
-# from loutilities.user.model import db, LocalUserMixin, ManageLocalTables, EMAIL_LEN
+from loutilities.user.model import db, LocalUserMixin, ManageLocalTables
 # from loutilities.user.tablefiles import FilesMixin
-db = SQLAlchemy()
 
 # set up database - SQLAlchemy() must be done after app.config SQLALCHEMY_* assignments
 Table = db.Table
@@ -43,4 +41,37 @@ class Blog(Base):
     __tablename__ = 'blog'
     id      = Column(Integer(), primary_key=True)
     title   = Column(Text)
-    
+
+# *** last bit for users/interest
+# copied by update_local_tables
+class LocalUser(LocalUserMixin, Base):
+    __tablename__ = 'localuser'
+    id                  = Column(Integer(), primary_key=True)
+    interest_id         = Column(Integer, ForeignKey('localinterest.id'))
+    interest            = relationship('LocalInterest', backref=backref('users'))
+    userpositions       = relationship('UserPosition', back_populates='user')
+    version_id          = Column(Integer, nullable=False, default=1)
+    __mapper_args__ = {
+        'version_id_col' : version_id
+    }
+
+# note update_local_tables only copies Interests for current application (g.loutility)
+class LocalInterest(Base):
+    __tablename__ = 'localinterest'
+    id                  = Column(Integer(), primary_key=True)
+    interest_id         = Column(Integer)
+
+    version_id          = Column(Integer, nullable=False, default=1)
+    __mapper_args__ = {
+        'version_id_col' : version_id
+    }
+
+# supporting functions
+def update_local_tables():
+    '''
+    keep LocalUser table consistent with external db User table
+    '''
+    # appname needs to match Application.application
+    localtables = ManageLocalTables(db, 'members', LocalUser, LocalInterest, hasuserinterest=True)
+    localtables.update()
+

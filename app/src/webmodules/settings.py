@@ -70,17 +70,17 @@ class RealDb(Config):
         # app.logger.debug(f'mysql://{dbuser}:*******@{dbserver}/{dbname}')
         db_uri = f'mysql://{dbuser}:{password}@{dbserver}/{dbname}'
         self.SQLALCHEMY_DATABASE_URI = db_uri
-        # # uncomment when user database is available
-        # # https://flask-sqlalchemy.palletsprojects.com/en/2.x/binds/
-        # userdbuser = config['userdbuser']
-        # userpassword = config['userdbpassword']
-        # userdbserver = config['userdbserver']
-        # userdbname = config['userdbname']
-        # userdb_uri = 'mysql://{uname}:{pw}@{server}/{dbname}'.format(uname=userdbuser, pw=userpassword, server=userdbserver,
-        #                                                          dbname=userdbname)
-        # self.SQLALCHEMY_BINDS = {
-        #     'users': userdb_uri
-        # }
+        # when user database is available, add bind
+        if 'userdbname' in config:
+            # https://flask-sqlalchemy.palletsprojects.com/en/2.x/binds/
+            userdbuser = config['userdbuser']
+            userpassword = config['userdbpassword']
+            userdbserver = config['userdbserver']
+            userdbname = config['userdbname']
+            userdb_uri = f'mysql://{userdbuser}:{userpassword}@{userdbserver}/{userdbname}'
+            self.SQLALCHEMY_BINDS = {
+                'users': userdb_uri
+            }
 
 
 class Development(RealDb):
