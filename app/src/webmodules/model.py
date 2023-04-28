@@ -49,7 +49,6 @@ class LocalUser(LocalUserMixin, Base):
     id                  = Column(Integer(), primary_key=True)
     interest_id         = Column(Integer, ForeignKey('localinterest.id'))
     interest            = relationship('LocalInterest', backref=backref('users'))
-    userpositions       = relationship('UserPosition', back_populates='user')
     version_id          = Column(Integer, nullable=False, default=1)
     __mapper_args__ = {
         'version_id_col' : version_id
