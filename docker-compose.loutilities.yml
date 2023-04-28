@@ -1,0 +1,10 @@
+version: '3.8'
+
+# use editable loutilities; note need to change when python version changes
+services:
+  app:
+    volumes:
+      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python3.9/site-packages/loutilities
+  shell:
+    volumes:
+      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python3.9/site-packages/loutilities
