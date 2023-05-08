@@ -24,7 +24,7 @@ RUN apk add --no-cache mariadb-connector-c-dev \
     && apk add --no-cache --virtual .build-deps \
         build-base \
         mariadb-dev \
-    && pip install -qq -r requirements.txt \
+    && pip install -r requirements.txt \
     && rm -rf .cache/pip \
     && apk del .build-deps
 

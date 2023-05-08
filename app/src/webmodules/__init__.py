@@ -17,10 +17,11 @@ from werkzeug.local import LocalProxy
 # from .views.admin.viewhelpers import localinterest
 # from .model import update_local_tables, LocalUser, LocalInterest
 # from .views.admin.uploads import init_uploads
+import loutilities
 from loutilities.configparser import getitems
-# from loutilities.user import UserSecurity
+from loutilities.user import UserSecurity
 from loutilities.user.model import Interest, Application, User, Role
-# from loutilities.flask_helpers.mailer import sendmail
+from loutilities.flask_helpers.mailer import sendmail
 
 appname = 'webmodules'
 
@@ -77,66 +78,68 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     #         if not g.interest:
     #             g.interest = request.args.get('interest', None)
 
-    # # add loutilities tables-assets for js/css/template loading
-    # # see https://adambard.com/blog/fresh-flask-setup/
-    # #    and https://webassets.readthedocs.io/en/latest/environment.html#webassets.env.Environment.load_path
-    # # loutilities.__file__ is __init__.py file inside loutilities; os.path.split gets package directory
-    # loutilitiespath = os.path.join(os.path.split(loutilities.__file__)[0], 'tables-assets', 'static')
+    # add loutilities tables-assets for js/css/template loading
+    # see https://adambard.com/blog/fresh-flask-setup/
+    #    and https://webassets.readthedocs.io/en/latest/environment.html#webassets.env.Environment.load_path
+    # loutilities.__file__ is __init__.py file inside loutilities; os.path.split gets package directory
+    loutilitiespath = os.path.join(os.path.split(loutilities.__file__)[0], 'tables-assets', 'static')
 
-    # @app.route('/loutilities/static/<path:filename>')
-    # def loutilities_static(filename):
-    #     return send_from_directory(loutilitiespath, filename)
+    @app.route('/loutilities/static/<path:filename>')
+    def loutilities_static(filename):
+        return send_from_directory(loutilitiespath, filename)
 
     # # bring in js, css assets here, because app needs to be created first
-    # from .assets import asset_env, asset_bundles
-    # with app.app_context():
-    #     # needs to be set before update_local_tables called and before UserSecurity() instantiated
-    #     g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
+    from .assets import asset_env, asset_bundles
+    with app.app_context():
+        # needs to be set before update_local_tables called and before UserSecurity() instantiated
+        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
 
     #     # update LocalUser and LocalInterest tables
     #     if init_for_operation:
     #         update_local_tables()
 
-    #     # js/css files
-    #     asset_env.append_path(app.static_folder)
-    #     asset_env.append_path(loutilitiespath, '/loutilities/static')
+        # js/css files
+        asset_env.append_path(app.static_folder)
+        asset_env.append_path(loutilitiespath, '/loutilities/static')
 
-    #     # templates
-    #     loader = ChoiceLoader([
-    #         app.jinja_loader,
-    #         PackageLoader('loutilities', 'tables-assets/templates')
-    #     ])
-    #     app.jinja_loader = loader
+        # templates
+        loader = ChoiceLoader([
+            app.jinja_loader,
+            PackageLoader('loutilities', 'tables-assets/templates')
+        ])
+        app.jinja_loader = loader
 
-    # # initialize assets
-    # asset_env.init_app(app)
-    # asset_env.register(asset_bundles)
+    # initialize assets
+    asset_env.init_app(app)
+    asset_env.register(asset_bundles)
 
     # Set up Flask-Mail [configuration in <application>.cfg] and security mailer
     mail = Mail(app)
 
-    # def security_send_mail(subject, recipient, template, **context):
-    #     # this may be called from view which doesn't reference interest
-    #     # if so pick up user's first interest to get from_email address
-    #     if not g.interest:
-    #         g.interest = context['user'].interests[0].interest if context['user'].interests else None
-    #     if g.interest:
-    #         from_email = localinterest().from_email
-    #     # use default if user didn't have any interests
-    #     else:
-    #         from_email = current_app.config['SECURITY_EMAIL_SENDER']
-    #         # copied from flask_security.utils.send_mail
-    #         if isinstance(from_email, LocalProxy):
-    #             from_email = from_email._get_current_object()
-    #     ctx = ('security/email', template)
-    #     html = render_template('%s/%s.html' % ctx, **context)
-    #     text = render_template('%s/%s.txt' % ctx, **context)
-    #     sendmail(subject, from_email, recipient, html=html, text=text)
+    def security_send_mail(subject, recipient, template, **context):
+        # this may be called from view which doesn't reference interest
+        # if so pick up user's first interest to get from_email address
+        # ## ADD WHEN INTERESTS ADDED
+        # if not g.interest:
+        #     g.interest = context['user'].interests[0].interest if context['user'].interests else None
+        # if g.interest:
+        #     from_email = localinterest().from_email
+        # # use default if user didn't have any interests
+        # else:
+        #     from_email = current_app.config['SECURITY_EMAIL_SENDER']
+        #     # copied from flask_security.utils.send_mail
+        #     if isinstance(from_email, LocalProxy):
+        #         from_email = from_email._get_current_object()
+        from_email = current_app.config['SECURITY_EMAIL_SENDER']
+        ctx = ('security/email', template)
+        html = render_template('%s/%s.html' % ctx, **context)
+        text = render_template('%s/%s.txt' % ctx, **context)
+        sendmail(subject, from_email, recipient, html=html, text=text)
 
-    # # Set up Flask-Security
-    # global user_datastore, security
-    # user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    # security = UserSecurity(app, user_datastore, send_mail=security_send_mail)
+    # Set up Flask-Security
+    global user_datastore, security
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security = UserSecurity(app, user_datastore, send_mail=security_send_mail)
 
     # # activate views
     # from .views import userrole as userroleviews
@@ -152,8 +155,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     #    RuntimeError: Attempted to generate a URL without the application context being pushed.
     # see http://kronosapiens.github.io/blog/2014/08/14/understanding-contexts-in-flask.html
     with app.app_context():
-        # # import navigation after views created
-        # from . import nav
+        # import navigation after views created
+        from . import nav
 
         # turn on logging
         from .applogging import setlogging
@@ -162,8 +165,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         # set up scoped session
         from sqlalchemy.orm import scoped_session, sessionmaker
         # see https://github.com/pallets/flask-sqlalchemy/blob/706982bb8a096220d29e5cef156950237753d89f/flask_sqlalchemy/__init__.py#L990
-        # use binds if userdb is defined
-        if 'userdbname' in app.config:
+        # use binds if defined
+        if 'SQLALCHEMY_BINDS' in app.config:
             db.session = scoped_session(sessionmaker(autocommit=False,
                                                     autoflush=False,
                                                     binds=db.get_binds(app)
@@ -180,9 +183,9 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         #                 redirect_to=url_for('static', filename='favicon.ico'))
 
     # # ----------------------------------------------------------------------
-    # @app.before_request
-    # def before_request():
-    #     g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
+    @app.before_request
+    def before_request():
+        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
 
     #     if current_user.is_authenticated:
     #         user = current_user
@@ -215,6 +218,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
 
         if not app.config['DEBUG']:
             app.logger.info(f'{request.remote_addr}: {request.method} {request.url} {response.status_code}')
+            # debug
+            # app.logger.info(f'request.headers:\n{request.headers}')
         
         return response
 

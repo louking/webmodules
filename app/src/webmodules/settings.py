@@ -34,8 +34,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # branding
-    THISAPP_PRODUCTNAME = '<span class="brand-all"><span class="brand-left">module</span><span class="brand-right">tility</span></span>'
-    THISAPP_PRODUCTNAME_TEXT = 'moduletility'
+    THISAPP_PRODUCTNAME = '<span class="brand-all"><span class="brand-left">web</span><span class="brand-right">modules</span></span>'
+    THISAPP_PRODUCTNAME_TEXT = 'webmodules'
 
 
 class Testing(Config):
