@@ -119,8 +119,8 @@ frontend_common_css = Bundle(
     'filters.css',  # from loutilities
     'branding.css',  # from loutilities
 
-    'js/smartmenus-{ver}/css/sm-core-css.css'.format(ver=sm_ver),
-    'js/smartmenus-{ver}/css/sm-blue/sm-blue.css'.format(ver=sm_ver),
+    f'js/smartmenus-{sm_ver}/css/sm-core-css.css',
+    f'js/smartmenus-{sm_ver}/css/sm-blue/sm-blue.css',
 
     'style.css',
     # 'admin/style.css',      # TODO: some of this is for smartmenus, should be in style.css
@@ -159,7 +159,7 @@ asset_bundles = {
         Bundle(f'js/jquery-{jq_ver}/jquery-{jq_ver}.js', filters='jsmin'),
         Bundle(f'js/jquery-ui-{jq_ui_ver}.custom/jquery-ui.js', filters='jsmin'),
 
-        Bundle('js/smartmenus-{ver}/jquery.smartmenus.js'.format(ver=sm_ver), filters='jsmin'),
+        Bundle(f'js/smartmenus-{sm_ver}/jquery.smartmenus.js', filters='jsmin'),
         Bundle(f'js/lodash-{lodash_ver}/lodash.js', filters='jsmin'),
 
         # Bundle('js/JSZip-{ver}/jszip.js'.format(ver=jszip_ver), filters='jsmin'),
