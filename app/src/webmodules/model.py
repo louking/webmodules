@@ -71,6 +71,6 @@ def update_local_tables():
     keep LocalUser table consistent with external db User table
     '''
     # appname needs to match Application.application
-    localtables = ManageLocalTables(db, 'members', LocalUser, LocalInterest, hasuserinterest=True)
+    localtables = ManageLocalTables(db, g.loutility.application, LocalUser, LocalInterest, hasuserinterest=True)
     localtables.update()
 
