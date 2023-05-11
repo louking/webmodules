@@ -142,13 +142,13 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     security = UserSecurity(app, user_datastore, send_mail=security_send_mail)
 
     # # activate views
-    # from .views import userrole as userroleviews
-    # from loutilities.user.views import bp as userrole
-    # app.register_blueprint(userrole)
+    from .views import userrole as userroleviews
+    from loutilities.user.views import bp as userrole
+    app.register_blueprint(userrole)
     from .views.public import bp as public
     app.register_blueprint(public)
-    # from .views.admin import bp as admin
-    # app.register_blueprint(admin)
+    from .views.admin import bp as admin
+    app.register_blueprint(admin)
 
     # need to force app context else get
     #    RuntimeError: Working outside of application context.
@@ -187,23 +187,23 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     def before_request():
         g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
 
-    #     if current_user.is_authenticated:
-    #         user = current_user
-    #         email = user.email
+        if current_user.is_authenticated:
+            user = current_user
+            email = user.email
 
-    #         # used in layout.jinja2
-    #         app.jinja_env.globals['user_interests'] = sorted([{'interest': i.interest, 'description': i.description}
-    #                                                           for i in user.interests if g.loutility in i.applications],
-    #                                                          key=lambda a: a['description'].lower())
-    #         session['user_email'] = email
+            # used in layout.jinja2
+            app.jinja_env.globals['user_interests'] = sorted([{'interest': i.interest, 'description': i.description}
+                                                              for i in user.interests if g.loutility in i.applications],
+                                                             key=lambda a: a['description'].lower())
+            session['user_email'] = email
 
-    #     else:
-    #         # used in layout.jinja2
-    #         pubinterests = Interest.query.filter_by(public=True).all()
-    #         app.jinja_env.globals['user_interests'] = sorted([{'interest': i.interest, 'description': i.description}
-    #                                                           for i in pubinterests if g.loutility in i.applications],
-    #                                                          key=lambda a: a['description'].lower())
-    #         session.pop('user_email', None)
+        else:
+            # used in layout.jinja2
+            pubinterests = Interest.query.filter_by(public=True).all()
+            app.jinja_env.globals['user_interests'] = sorted([{'interest': i.interest, 'description': i.description}
+                                                              for i in pubinterests if g.loutility in i.applications],
+                                                             key=lambda a: a['description'].lower())
+            session.pop('user_email', None)
 
     # ----------------------------------------------------------------------
     @app.after_request

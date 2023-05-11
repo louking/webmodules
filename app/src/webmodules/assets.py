@@ -255,7 +255,7 @@ asset_bundles = {
         Bundle('branding.css', filters=['cssrewrite', 'cssmin']),     # from loutilities
 
         Bundle('style.css', filters=['cssrewrite', 'cssmin']),
-        # Bundle('admin/style.css', filters=['cssrewrite', 'cssmin']),
+        Bundle('admin/style.css', filters=['cssrewrite', 'cssmin']),
 
         output='gen/admin.css',
         # cssrewrite helps find image files when ASSETS_DEBUG = False

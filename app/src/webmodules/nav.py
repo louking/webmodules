@@ -65,7 +65,7 @@ def nav_menu():
                 contexthelp[url_for(endpoint, **kwargs)] = self.basehelp + slugify(prelink + ' ' + text + ' view')
 
 
-    org_admin_view = add_view('https://webmodules.readthedocs.io/en/{docversion}/organization-admin-reference.html#')
+    super_admin_view = add_view('https://webmodules.readthedocs.io/en/{docversion}/super-admin-reference.html#')
 
     # create context help menu items for views which can't be navigated to from the main menu
     # if g.interest:
@@ -75,6 +75,7 @@ def nav_menu():
     #     meetings_admin_view.nomenu_help('Meeting Status', 'admin.meetingstatus', interest=g.interest)
 
     if current_user.is_authenticated:
+        navbar.items.append(View('Home', 'admin.home'))
         # navbar.items.append(View('Home', 'admin.home', interest=g.interest))
         # # deeper functions are only accessible when interest is set
         # if g.interest:
@@ -168,15 +169,15 @@ def nav_menu():
             #     leadership_superadmin_view(userroles, 'Email Templates', 'admin.emailtemplates', interest=g.interest)
             #     leadership_superadmin_view(userroles, 'Document Templates', 'admin.doctemplates', interest=g.interest)
 
-            # leadership_superadmin_view(userroles, 'Roles', 'userrole.roles')
-            # leadership_superadmin_view(userroles, 'Interests', 'userrole.interests')
-            # leadership_superadmin_view(userroles, 'Applications', 'userrole.applications')
+            super_admin_view(userroles, 'Roles', 'userrole.roles')
+            super_admin_view(userroles, 'Interests', 'userrole.interests')
+            super_admin_view(userroles, 'Applications', 'userrole.applications')
 
             # if g.interest:
             #     leadership_superadmin_view(userroles, 'Files', 'admin.files', interest=g.interest)
 
             navbar.items.append(View('My Account', 'security.change_password'))
-            userroles.items.append(View('Debug', 'admin.debug'))
+            # userroles.items.append(View('Debug', 'admin.debug'))
 
         # finally for non ROLE_SUPER_ADMIN
         else:
