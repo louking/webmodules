@@ -92,7 +92,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     from .assets import asset_env, asset_bundles
     with app.app_context():
         # needs to be set before update_local_tables called and before UserSecurity() instantiated
-        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
+        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one_or_none()
 
     #     # update LocalUser and LocalInterest tables
     #     if init_for_operation:
@@ -185,7 +185,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     # # ----------------------------------------------------------------------
     @app.before_request
     def before_request():
-        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one()
+        g.loutility = Application.query.filter_by(application=app.config['APP_LOUTILITY']).one_or_none()
 
         if current_user.is_authenticated:
             user = current_user
