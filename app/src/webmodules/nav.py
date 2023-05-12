@@ -169,6 +169,7 @@ def nav_menu():
             #     leadership_superadmin_view(userroles, 'Email Templates', 'admin.emailtemplates', interest=g.interest)
             #     leadership_superadmin_view(userroles, 'Document Templates', 'admin.doctemplates', interest=g.interest)
 
+            super_admin_view(userroles, 'Users', 'userrole.users')
             super_admin_view(userroles, 'Roles', 'userrole.roles')
             super_admin_view(userroles, 'Interests', 'userrole.interests')
             super_admin_view(userroles, 'Applications', 'userrole.applications')
