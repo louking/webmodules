@@ -41,6 +41,7 @@ def deploy(c, branchname='main', qualifier='prod'):
         raise Exit(f'branchname {branchname} does not exist')
 
     c.run(f'cd {project_dir} && git checkout {branchname}')
+    c.run(f'cd {project_dir} && cp -R ../../libs/js  app/src/{APP_NAME}/static')
     
     # stop and build/start docker services
     c.run(f'cd {project_dir} && docker compose down')
