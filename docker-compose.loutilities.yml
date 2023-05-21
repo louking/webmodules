@@ -1,10 +1,13 @@
 version: '3.8'
 
-# use editable loutilities; note need to change when python version changes
+# use editable loutilities
 services:
   app:
+    build: 
+      args:
+        - PYTHON_LIB_VER=${PYTHON_LIB_VER}
     volumes:
-      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python3.9/site-packages/loutilities
+      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python${PYTHON_LIB_VER}/site-packages/loutilities
   shell:
     volumes:
-      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python3.9/site-packages/loutilities
+      - ..\..\loutilities\loutilities\loutilities:/usr/local/lib/python${PYTHON_LIB_VER}/site-packages/loutilities
