@@ -20,11 +20,10 @@ class AdminHome(MethodView):
         return render_template('home.jinja2',
                                pagename='Admin Home',
                                # causes redirect to current interest if bare url used
-                               url_rule='/admin',
-                            #    url_rule='/admin/<interest>',
+                               url_rule='/admin/<interest>',
                                )
 
 admin_view = AdminHome.as_view('home')
 bp.add_url_rule('/', view_func=admin_view, methods=['GET',])
-# bp.add_url_rule('/<interest>', view_func=admin_view, methods=['GET',])
+bp.add_url_rule('/<interest>', view_func=admin_view, methods=['GET',])
 

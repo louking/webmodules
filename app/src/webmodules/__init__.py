@@ -67,16 +67,16 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     # if init_for_operation:
     #     init_uploads(app)
 
-    # # handle <interest> in URL - https://flask.palletsprojects.com/en/1.1.x/patterns/urlprocessors/
-    # @app.url_value_preprocessor
-    # def pull_interest(endpoint, values):
-    #     try:
-    #         g.interest = values.pop('interest', None)
-    #     except AttributeError:
-    #         g.interest = None
-    #     finally:
-    #         if not g.interest:
-    #             g.interest = request.args.get('interest', None)
+    # handle <interest> in URL - https://flask.palletsprojects.com/en/1.1.x/patterns/urlprocessors/
+    @app.url_value_preprocessor
+    def pull_interest(endpoint, values):
+        try:
+            g.interest = values.pop('interest', None)
+        except AttributeError:
+            g.interest = None
+        finally:
+            if not g.interest:
+                g.interest = request.args.get('interest', None)
 
     # add loutilities tables-assets for js/css/template loading
     # see https://adambard.com/blog/fresh-flask-setup/
@@ -120,8 +120,8 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         # this may be called from view which doesn't reference interest
         # if so pick up user's first interest to get from_email address
         # ## ADD WHEN INTERESTS ADDED
-        # if not g.interest:
-        #     g.interest = context['user'].interests[0].interest if context['user'].interests else None
+        if not g.interest:
+            g.interest = context['user'].interests[0].interest if context['user'].interests else None
         # if g.interest:
         #     from_email = localinterest().from_email
         # # use default if user didn't have any interests

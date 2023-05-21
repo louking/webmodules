@@ -64,7 +64,7 @@ frontend_common_js = Bundle(
 
     f'js/Select-{dt_select_ver}/js/dataTables.select.js',
 
-    # # select2 is required for use by Editor forms and interest navigation
+    # select2 is required for use by Editor forms and interest navigation
     f'js/select2-{s2_ver}/js/select2.full.js',
     # # the order here is important
     'js/FieldType-Select2/editor.select2.js',
@@ -192,7 +192,6 @@ asset_bundles = {
         # # ckeditor (note this is already minimized, and filter through jsmin causes problems)
         # 'js/ckeditor5-build-{type}-{ver}/build/ckeditor.js'.format(ver=cke_ver, type=cke_type),
 
-        # Bundle('admin/layout.js', filters='jsmin'),
         Bundle('layout.js', filters='jsmin'),
 
         # must be before datatables
