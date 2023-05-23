@@ -1,6 +1,9 @@
 version: '3.8'
 
 services:
+  web:
+    volumes:
+      - ./web/nginx-longtimeout.conf:/etc/nginx/conf.d/nginx-longtimeout.conf
   app:
     ports:
       - 5678:5678
