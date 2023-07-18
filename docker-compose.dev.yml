@@ -7,8 +7,6 @@ services:
       args:
         - PYTHON_VER=${PYTHON_VER}
     restart: always
-    depends_on:
-      - db
     secrets:
       - db-password
       - users-password

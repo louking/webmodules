@@ -11,7 +11,6 @@ from flask_security import auth_required
 
 # homegrown
 from . import bp
-from ...model import Blog
 
 class AdminHome(MethodView):
     decorators = [auth_required()]

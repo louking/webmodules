@@ -93,6 +93,8 @@ def run_migrations_offline():
         rec['url'] = context.config.get_section_option(name, "sqlalchemy.url")
 
     for name, rec in engines.items():
+        # skip all but default bind
+        if name: continue
         logger.info("Migrating database %s" % (name or '<default>'))
         file_ = "%s.sql" % name
         logger.info("Writing output to %s" % file_)
@@ -150,6 +152,8 @@ def run_migrations_online():
 
     try:
         for name, rec in engines.items():
+            # skip all but default bind
+            if name: continue
             logger.info("Migrating database %s" % (name or '<default>'))
             context.configure(
                 connection=rec['connection'],

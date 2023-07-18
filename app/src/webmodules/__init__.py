@@ -88,7 +88,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     def loutilities_static(filename):
         return send_from_directory(loutilitiespath, filename)
 
-    # # bring in js, css assets here, because app needs to be created first
+    # bring in js, css assets here, because app needs to be created first
     from .assets import asset_env, asset_bundles
     with app.app_context():
         # needs to be set before update_local_tables called and before UserSecurity() instantiated
@@ -141,7 +141,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = UserSecurity(app, user_datastore, send_mail=security_send_mail)
 
-    # # activate views
+    # activate views
     from .views import userrole as userroleviews
     from loutilities.user.views import bp as userrole
     app.register_blueprint(userrole)
@@ -166,7 +166,7 @@ def create_app(config_obj, configfiles=None, init_for_operation=True):
         from sqlalchemy.orm import scoped_session, sessionmaker
         # see https://github.com/pallets/flask-sqlalchemy/blob/706982bb8a096220d29e5cef156950237753d89f/flask_sqlalchemy/__init__.py#L990
         # use binds if defined
-        if 'SQLALCHEMY_BINDS' in app.config:
+        if 'SQLALCHEMY_BINDS' in app.config and app.config['SQLALCHEMY_BINDS']:
             db.session = scoped_session(sessionmaker(autocommit=False,
                                                     autoflush=False,
                                                     binds=db.get_binds(app)

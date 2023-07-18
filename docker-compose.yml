@@ -3,24 +3,6 @@ version: "3.8"
 # see .env for image version env variables
 # see repo/settings/environments for image version env variables for github actions
 services:
-  db:
-    # https://github.com/docker-library/mysql/issues/275#issuecomment-636831964
-    image: mysql:${MYSQL_VER}
-    command: '--default-authentication-plugin=mysql_native_password'
-    # command: '--default-authentication-plugin=mysql_native_password --log_error_verbosity=3' # mysql
-    restart: always
-    secrets:
-      - db-password
-      - users-password
-    volumes:
-      - db-data:/var/lib/mysql
-    networks:
-      - backend-network
-    environment:
-      - MYSQL_DATABASE=users
-      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD_FILE=/run/secrets/users-password
 
   app:
     build: 
@@ -28,8 +10,6 @@ services:
       args:
         - PYTHON_VER=${PYTHON_VER}
     restart: always
-    depends_on:
-      - db
     secrets:
       - db-password
       - users-password
@@ -62,25 +42,12 @@ services:
     # uncomment to debug
     # command: [nginx-debug, '-g', 'daemon off;']
 
-  phpmyadmin:
-    image: phpmyadmin:${PHPMYADMIN_VER}-fpm
-    restart: always
-    depends_on:
-      - db
-    networks:
-      - backend-network
-      - frontend-network
-    environment:
-      - PMA_ABSOLUTE_URI=http://phpmyadmin/phpmyadmin
-
   crond:
     build:
       context: crond
       args:
         - ALPINE_VER=${ALPINE_VER}
     restart: always
-    depends_on:
-      - db
     networks:
       - backend-network
     secrets:
@@ -94,8 +61,6 @@ services:
     # use this to debug
     # command: ["crond", "-f", "-d", "8", "-l", "2", "-L", "/dev/stdout"]
 
-volumes:
-  db-data:
 
 secrets:
   db-password:
@@ -107,4 +72,6 @@ secrets:
 
 networks:
   backend-network:
+    external: True
+    name: docker-backend
   frontend-network:
