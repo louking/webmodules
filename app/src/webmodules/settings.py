@@ -7,8 +7,11 @@ see http://flask.pocoo.org/docs/1.0/config/?highlight=production#configuration-b
 # standard
 import logging
 
-# homegrown
+# pypi
 from loutilities.configparser import getitems
+
+# homegrown
+from . import appname
 
 
 class Config(object):
@@ -64,22 +67,24 @@ class RealDb(Config):
         for configfile in configfiles:
             config.update(getitems(configfile, 'database'))
         dbuser = config['dbuser']
-        password = config['dbpassword']
+        with open(f'/run/secrets/{appname}-password') as pw:
+            password = pw.readline().strip()
         dbserver = config['dbserver']
         dbname = config['dbname']
         # app.logger.debug(f'mysql://{dbuser}:*******@{dbserver}/{dbname}')
         db_uri = f'mysql://{dbuser}:{password}@{dbserver}/{dbname}'
         self.SQLALCHEMY_DATABASE_URI = db_uri
         # when user database is available, add bind
-        if 'userdbname' in config:
+        if 'usersdbname' in config:
             # https://flask-sqlalchemy.palletsprojects.com/en/2.x/binds/
-            userdbuser = config['userdbuser']
-            userpassword = config['userdbpassword']
-            userdbserver = config['userdbserver']
-            userdbname = config['userdbname']
-            userdb_uri = f'mysql://{userdbuser}:{userpassword}@{userdbserver}/{userdbname}'
+            usersdbuser = config['usersdbuser']
+            with open(f'/run/secrets/users-password') as pw:
+                userspassword = pw.readline().strip()
+            usersdbserver = config['usersdbserver']
+            usersdbname = config['usersdbname']
+            usersdb_uri = f'mysql://{usersdbuser}:{userspassword}@{usersdbserver}/{usersdbname}'
             self.SQLALCHEMY_BINDS = {
-                'users': userdb_uri
+                'users': usersdb_uri
             }
 
 
