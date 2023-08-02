@@ -11,7 +11,7 @@ services:
         - PYTHON_VER=${PYTHON_VER}
     restart: always
     secrets:
-      - db-password
+      - root-password
       - users-password
       - webmodules-password
     networks:
@@ -51,7 +51,7 @@ services:
     networks:
       - backend-network
     secrets:
-      - db-password
+      - root-password
     volumes:
       - ./config/msmtprc:/etc/msmtprc:ro
     environment:
@@ -63,7 +63,7 @@ services:
 
 
 secrets:
-  db-password:
+  root-password:
     file: config/db/root-password.txt
   users-password:
     file: config/db/users-password.txt

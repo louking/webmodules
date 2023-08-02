@@ -8,7 +8,7 @@ services:
         - PYTHON_VER=${PYTHON_VER}
     restart: always
     secrets:
-      - db-password
+      - root-password
       - users-password
     networks:
       - backend-network
